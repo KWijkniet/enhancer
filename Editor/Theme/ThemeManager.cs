@@ -13,6 +13,11 @@ namespace XT.Enhancer {
 
 internal static class ThemeManager {
 
+static Version v2019_3_0 = new Version(2019, 3, 0);
+static Version v2019_3_14 = new Version(2019, 3, 14);
+
+public static bool supported = Host.version >= v2019_3_0 && Host.version <= v2019_3_14;
+
 static ThemeSettings settings => Package.settings.theme;
 
 public static bool darkEnabled;
@@ -30,12 +35,23 @@ static State state {
 	set => SessionState.SetInt(stateKey, (int)value);
 }
 
+static string incompleteKey => $"{Package.name}.ThemeManager.incomplete";
+
+static bool incomplete {
+	get => EditorPrefs.GetBool(incompleteKey, false);
+	set => EditorPrefs.SetBool(incompleteKey, value);
+}
+
+static string darkThemeKey = "darkTheme";
+
 public static void OnLoad() {
+	if (!supported) { return; }
 	darkEnabled = settings.darkEnabled;
+	EditorPrefs.SetBool(darkThemeKey, settings.darkEnabled);
 	SetDarkModeInternalFlag();
 	switch (state) {
 	case State.Startup:
-		if (settings.darkEnabled) {
+		if (settings.autoEnable && settings.darkEnabled && !incomplete) {
 			EditorApplication.delayCall += async () => {
 				// give editor enough time to complete initial load
 				await Task.Delay(500);
@@ -53,12 +69,13 @@ public static void OnLoad() {
 			ReplaceSkin();
 			ProgressWindow.Hide();
 			state = State.Done;
+			incomplete = false;
 		};
 		break;
 	}
 }
 
-static 	Version v2019_3_8 = new Version(2019, 3, 8);
+static Version v2019_3_8 = new Version(2019, 3, 8);
 
 static void SetDarkModeInternalFlag() {
 	if (Host.version >= v2019_3_8) {
@@ -69,8 +86,10 @@ static void SetDarkModeInternalFlag() {
 // --------------------------------------------------------------------------------------------
 
 public static void SetTheme() {
+	if (!supported) { return; }
 	string themeName = settings.darkEnabled ? "Dark" : "Light";
 	ProgressWindow.Init($"Setting {themeName} Theme", "Hold on...", 3);
+	incomplete = true;
 	state = State.Switching;
 	PreLoad();
 	ReplaceSheets();

@@ -11,7 +11,11 @@ internal class ThemeSettings : PartSettings {
 [Setting("Enable Dark Theme")]
 public bool darkEnabled = false;
 
+[Setting("Auto Enable On Startup")]
+public bool autoEnable = false;
+
 public override void OnGUI(Setting setting) {
+	if (!ThemeManager.supported) { return; }
 	bool guiEnabled = GUI.enabled;
 	GUI.enabled = !Application.isPlaying;
 	base.OnGUI(setting);

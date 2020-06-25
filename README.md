@@ -1,11 +1,15 @@
 # Editor Enhancer
+[![openupm](https://img.shields.io/npm/v/com.xeleh.enhancer?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.xeleh.enhancer/)
+
 The Editor Enhancer package is a collection of utilities aimed to enhance the Unity Editor. See the [roadmap](#roadmap) section for more information on what is coming next.
 
 ### Requirements
 
-Unity 2019.3.0 or newer.  
+Unity 2019.3.0 or newer. Starting in Unity 2019.3.15 the Dark Theme feature is disabled.
 
 ### Installation
+
+***Via Git URL***
 
 Open the Package Manager window and follow the [instructions to install a package from a Git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html). This is the URL you need to enter:
 
@@ -13,6 +17,13 @@ Open the Package Manager window and follow the [instructions to install a packag
 https://github.com/xeleh/enhancer.git
 ```
 
+***Via OpenUPM***
+
+The package is available on the [openupm registry](https://openupm.com/packages/com.xeleh.enhancer/). It's recommended to install it via [openupm-cli](https://github.com/openupm/openupm-cli#openupm-cli).
+
+```
+openupm add com.xeleh.enhancer
+```
 
 ## Dark Theme
 
@@ -20,7 +31,14 @@ This is an option in Project Settings > Editor Enhancer to replace the personal 
 
 ![](https://xeleh.com/media/dark-theme.gif)
 
-This feature has been tested with all Unity 2019.3.x versions and the latest Unity 2020.1 betas. It is a 100% legal hack, meaning **no binary patching** or something like that. You can check the source code to see how it works.
+Until the release of Unity 2019.3.15 the feature was working with all Unity 2019.3.x versions and also with the first Unity 2020.1 betas. This was supposed to be a legal hack implying no binary patching and based on a technique that even got [some kind of an official approval](https://forum.unity.com/threads/editor-skinning-thread.711059/page-2#post-5620048), but short after this package was made public Unity decided to make some changes in the code to specifically [prevent this package from bypassing their entitlement](https://issuetracker.unity3d.com/issues/enhancer-package-bypasses-dark-theme-entitlement).
+
+### Troubleshooting
+
+After enabling the dark theme you could find a few windows (like Timeline) and 3rd party plugins still showing non darken parts. These cases are special and require [adapting the code for detecting our dark theme](Adapting.md).
+
+Please make sure to leave the 'Auto Enable On Startup' unchecked until you verify that the dark theme change works for your particular Unity configuration as expected.
+
 
 ## Sidebar
 
@@ -59,5 +77,5 @@ Just some simple but convenient menu scripts that I use frequently in my project
 
 ## Acknowledgements
 
-Thanks to TheZombieKiller, Peter77, Grimreaper358, Kamyker and everyone who contributed with code and ideas to the [Editor skinning thread](https://forum.unity.com/threads/editor-skinning-thread.711059/) in the Unity forums. You gave the hints and inspired me to complete the work.
+**Dark Theme**: Thanks to TheZombieKiller, Peter77, Grimreaper358, Kamyker and everyone who contributed with code and ideas to the [Editor skinning thread](https://forum.unity.com/threads/editor-skinning-thread.711059/) in the Unity forums. You gave the hints and inspired me to complete the work.
 
